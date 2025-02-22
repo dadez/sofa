@@ -13,13 +13,15 @@ local FIELD_SEPARATOR = "\x1f"
 local COMMAND_SEPARATOR = " > "
 
 ---@class Fuzzel: AbstractPicker
+---@field private default_options string
 local Fuzzel = pickers.AbstractPicker:new({})
 
 ---create a new fuzzel picker based on configuration
----@param _config table
+---@param config table
 ---@return Fuzzel
-function Fuzzel:new(_config)
-  local o = {}
+function Fuzzel:new(config)
+  -- local o = {}
+  local o = config.pickers.fuzzel
   setmetatable(o, self)
   self.__index = self
   return o
@@ -29,27 +31,29 @@ local function add_options(cmd, options)
   local cmd_parts = { cmd }
   if options.mesg then
     local mesg = utils.escape_quotes(options.mesg)
-    cmd_parts[#cmd_parts + 1] = string.format("-mesg '%s'", mesg)
+    -- cmd_parts[#cmd_parts + 1] = string.format("-mesg '%s'", mesg)
+    cmd_parts[#cmd_parts + 1] = string.format("--placeholder='%s'", mesg)
+    -- cmd_parts[#cmd_parts + 1] = string.format("'%s '", mesg)
   end
-  if options.case_insensitive then
-    cmd_parts[#cmd_parts + 1] = "-i"
-  end
-  if options.no_custom then
-    cmd_parts[#cmd_parts + 1] = "-no-custom"
-  end
-  if options.markup then
-    cmd_parts[#cmd_parts + 1] = "-markup-rows"
-  end
+  -- if options.case_insensitive then
+  --   cmd_parts[#cmd_parts + 1] = "-i"
+  -- end
+  -- if options.no_custom then
+  --   cmd_parts[#cmd_parts + 1] = "-no-custom"
+  -- end
+  -- if options.markup then
+  --   cmd_parts[#cmd_parts + 1] = "-markup-rows"
+  -- end
   if options.default then
     local default = utils.escape_quotes(options.default)
-    cmd_parts[#cmd_parts + 1] = string.format("-select '%s'", default)
+    cmd_parts[#cmd_parts + 1] = string.format("--select '%s'", default)
   end
   return table.concat(cmd_parts, " ")
 end
 
 function Fuzzel:_pick_from_cmd(prompt, choices_cmd, options)
   prompt = utils.escape_quotes(prompt)
-  local cmd = string.format("%s | fuzzel --dmenu -p '%s'", choices_cmd, prompt)
+  local cmd = string.format("%s | fuzzel %s --dmenu -p '%s '", choices_cmd, self.default_options, prompt)
   local command = add_options(cmd, options)
   local status_code, response = utils.run(command)
   if status_code ~= 0 then
@@ -63,8 +67,7 @@ function Fuzzel:_pick(prompt, choices, options)
   local content = table.concat(choices, "\n")
   local filename, delete = utils.write_to_tmp(content)
   prompt = utils.escape_quotes(prompt)
-  --- TODO: fuzzel can't read from files
-  local cmd = string.format("fuzzel --dmenu --input '%s' -p '%s'", filename, prompt)
+  local cmd = string.format("fuzzel %s --dmenu < '%s' -p '%s '", self.default_options, filename, prompt)
   local command = add_options(cmd, options)
   local status_code, response = utils.run(command)
   delete()
@@ -78,7 +81,7 @@ end
 ---add options to a row
 ---@param row string
 ---@param options { [string]: any }
----@return string
+---@return string                                          l
 function Fuzzel:_add_row_options(row, options)
   local res = {}
   for k, v in pairs(options) do
@@ -102,7 +105,7 @@ function Fuzzel:pick_command(namespaces, interactive)
       end
       local choice = string.format("%s%s%s", ns_name, COMMAND_SEPARATOR, cmd_name)
       if cmd.description then
-        choice = choice .. string.format(' <span size="small"><i>(%s)</i></span>', cmd.description)
+        choice = choice .. string.format(" < (%s)", cmd.description)
       end
       choices[#choices + 1] = self:_add_row_options(choice, options)
     end
@@ -112,7 +115,7 @@ function Fuzzel:pick_command(namespaces, interactive)
     os.exit(1)
   end
   local pick = self:_pick("Command", choices, { no_custom = true, case_insensitive = true, markup = true })
-  local namespace, command = pick:match("^(.+)" .. COMMAND_SEPARATOR .. "(.+) <span")
+  local namespace, command = pick:match("^(.+)" .. COMMAND_SEPARATOR .. "(.+) <")
   if not namespace then
     namespace, command = pick:match("^(.+)" .. COMMAND_SEPARATOR .. "(.+)$")
   end
@@ -163,7 +166,8 @@ function Fuzzel:pick_parameter(parameter, command, params)
   end
   command = command:gsub(
     string.format("{{%%s*%s%%s*}}", parameter.name),
-    string.format('<span foreground="red">%s</span>', sub)
+    -- string.format('<span foreground="red">%s</span>', sub)
+    string.format("%s", sub)
   )
   local options = {
     markup = true,

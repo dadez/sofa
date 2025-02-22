@@ -6,6 +6,10 @@
 
 - Allow argument commands to use previous argument choices.
 
+## [0.6.0] - 2025-02-22
+
+### Added support for fuzzel as rofi alternative
+
 ## [0.5.2] - 2024-06-03
 
 ### Added
@@ -89,7 +93,8 @@
 
 Initial release.
 
-[unreleased]: https://github.com/f4z3r/sofa/compare/v0.5.2...main
+[unreleased]: https://github.com/f4z3r/sofa/compare/v0.6.0...main
+[0.6.0]: https://github.com/dadez/sofa/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/f4z3r/sofa/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/f4z3r/sofa/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/f4z3r/sofa/compare/v0.4.0...v0.5.0
