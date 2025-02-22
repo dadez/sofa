@@ -49,7 +49,7 @@ end
 
 function Fuzzel:_pick_from_cmd(prompt, choices_cmd, options)
   prompt = utils.escape_quotes(prompt)
-  local cmd = string.format("%s | fuzzel -dmenu -p '%s'", choices_cmd, prompt)
+  local cmd = string.format("%s | fuzzel --dmenu -p '%s'", choices_cmd, prompt)
   local command = add_options(cmd, options)
   local status_code, response = utils.run(command)
   if status_code ~= 0 then
@@ -63,7 +63,8 @@ function Fuzzel:_pick(prompt, choices, options)
   local content = table.concat(choices, "\n")
   local filename, delete = utils.write_to_tmp(content)
   prompt = utils.escape_quotes(prompt)
-  local cmd = string.format("fuzzel -dmenu -input '%s' -p '%s'", filename, prompt)
+  --- TODO: fuzzel can't read from files
+  local cmd = string.format("fuzzel --dmenu --input '%s' -p '%s'", filename, prompt)
   local command = add_options(cmd, options)
   local status_code, response = utils.run(command)
   delete()

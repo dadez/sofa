@@ -1,5 +1,5 @@
 local package_name = "sofa"
-local package_version = "0.5.2"
+local package_version = "0.6.0"
 local rockspec_revision = "0"
 local github_account_name = "dadez"
 local github_repo_name = package_name
@@ -19,7 +19,7 @@ description = {
     A tool to organise and execute your commands, so convenient you can
     run it from your sofa.
   ]],
-  homepage = "https://github.com/f4z3r/sofa",
+  homepage = "https://github.com/dadez/sofa",
   license = "MIT <http://opensource.org/licenses/MIT>",
 }
 
