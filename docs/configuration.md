@@ -132,6 +132,17 @@ A parameter of name `<name>` has the following structure.
   set. Defaults to `false`.
 - `choices`: a list of available choices for that parameter. Alternatively a command can be passed
    as a string, in which case the choices are computed via that command.
+
+   > [!NOTE]
+   > If `choices` is a command, it can reference previously selected parameter values using the same
+   > notations as placeholders in standard commands. For instance the `choices` command
+   >
+   >```sh
+   > nmcli --colors no -g ssid d wifi list {{ interfaces_name }}
+   > ```
+   >
+   > can be used to reference the value of the `interface_name` parameter previously selected.
+
 - `mapping`: a mapping which allows to turn a chosen option into another value before applying it to
   the command. In this case, if `other` is manually provided (allowed  even though `other` is not
   in `choices` since `exclusive: false`), the string `some-other-wifi` will get injected into the
@@ -156,7 +167,9 @@ config:
 - `log`: the log file to use. Defaults to `~/.local/state/sofa/sofa.log`.
 - `shell`: configure with what shell the command should be executed with when not running in
   interactive mode. Can be `bash`, `zsh`, `fish`. Defaults to `bash`.
-- `picker`: which picker to use. Can be either `rofi` or `fzf`. Defaults to `rofi`.
+- `picker`: which picker to use. Can be either `rofi`, `fzf`, or `auto`. Defaults to `rofi`. If
+  `auto` is set, it will detect if running with a `DISPLAY` set in order to dynamically choose
+  between `rofi` and `fzf` based on which can run.
 - `pickers`: configuration for individual pickers.
 - `pickers.fzf`: configuration for the `fzf` picker.
 - `pickers.fzf.default_options`: the default options to pass to `fzf`. Defaults to `--no-multi

@@ -1,6 +1,31 @@
 # Changelog
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
+
+## [0.8.0] - 2025-05-13
+
+### Added
+
+- Support automatically switching between pickers based on environment in which `sofa` is launched.
+
+### Fixed
+
+- Fixes issue where `fzf` was crashing when proving empty inputs that should be supported as custom
+  inputs (where an empty input is a valid input).
+
+## [0.7.0] - 2025-05-06
+
+### Added
+
+- Create a sample default configuration if none present.
+
+## [0.6.1] - 2025-05-04
+
+### Fixed
+
+- Improve handling of empty or invalid configuration files.
+
+## [0.6.0] - 2025-03-29
 
 ### Added
 
@@ -93,8 +118,13 @@
 
 Initial release.
 
-[unreleased]: https://github.com/f4z3r/sofa/compare/v0.6.0...main
-[0.6.0]: https://github.com/dadez/sofa/compare/v0.5.2...v0.6.0
+[unreleased]: https://github.com/dadez/sofa/compare/v0.8.0...main
+[0.6.0-dadez]: https://github.com/dadez/sofa/compare/v0.5.2...v0.6.0
+[unreleased-upstream]: https://github.com/f4z3r/sofa/compare/v0.8.0...main
+[0.8.0]: https://github.com/f4z3r/sofa/compare/v0.7.0...v0.8.0
+[0.7.0]: https://github.com/f4z3r/sofa/compare/v0.6.1...v0.7.0
+[0.6.1]: https://github.com/f4z3r/sofa/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/f4z3r/sofa/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/f4z3r/sofa/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/f4z3r/sofa/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/f4z3r/sofa/compare/v0.4.0...v0.5.0
